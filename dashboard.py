@@ -543,19 +543,19 @@ with tab2:
             "name":  "Recent & Active Buyers",
             "emoji": "🟢",
             "desc":  "Pelanggan baru saja belanja belakangan ini (Recency sangat rendah, rata-rata 1.4 hari). Tingkat interaksi sedang tinggi, namun frekuensi dan total belanja masih di tingkat menengah.",
-            "color": PALETTE['accent3'],
+            "color": PALETTE['accent2'],
         },
         1: {
             "name":  "Hibernating Customers",
             "emoji": "🔴",
             "desc":  "Pelanggan sudah lama tidak belanja (Recency tinggi, rata-rata 3.8 hari). Frekuensi belanja mereka paling rendah dan total uang yang dihabiskan paling sedikit.",
-            "color": PALETTE['accent4'],
+            "color": PALETTE['accent3'],
         },
         2: {
             "name":  "Champions / Top Spenders",
             "emoji": "🟡",
             "desc":  "Pelanggan bintang lima. Frekuensi belanja mereka paling tinggi (rata-rata 530 transaksi) dan total pengeluarannya paling besar (rata-rata $69,837 per orang).",
-            "color": PALETTE['accent2'],
+            "color": PALETTE['accent4'],
         },
     }
 
