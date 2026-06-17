@@ -495,16 +495,18 @@ with tab1:
             {True: 'With Discount', False: 'Without Discount'}
         )
         df_disc = df_disc.sort_values('Month-Year')
-        fig_disc = px.bar(
+        fig_disc = px.line(
             df_disc, x='Month-Year', y='Total Spent',
             color='Discount Applied',
-            barmode='group',
+            markers=True,
             color_discrete_map={
                 'With Discount':    PALETTE['accent2'],
                 'Without Discount': PALETTE['accent3'],
             },
         )
         fig_disc.update_traces(
+            line=dict(width=2),
+            marker=dict(size=5),
             hovertemplate="<b>%{x}</b><br>%{data.name}<br>Revenue: $%{y:,.0f}<extra></extra>",
         )
         fig_disc.update_xaxes(tickangle=45, tickfont=dict(size=9))
