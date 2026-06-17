@@ -24,6 +24,7 @@ PALETTE = {
     "accent2":   "#3FB950",
     "accent3":   "#F78166",
     "accent4":   "#D2A8FF",
+    "accent5":   "#E3B341",
     "text":      "#E6EDF3",
     "muted":     "#8B949E",
 }
@@ -555,7 +556,7 @@ with tab2:
             "name":  "Champions / Top Spenders",
             "emoji": "🟡",
             "desc":  "Pelanggan bintang lima. Frekuensi belanja mereka paling tinggi (rata-rata 530 transaksi) dan total pengeluarannya paling besar (rata-rata $69,837 per orang).",
-            "color": PALETTE['accent4'],
+            "color": PALETTE['accent5'],
         },
     }
 
@@ -625,9 +626,13 @@ with tab2:
         df_cnt['Label'] = df_cnt['Cluster'].apply(
             lambda x: f"{CLUSTER_META.get(x,{}).get('emoji','')} Cluster {x} — {CLUSTER_META.get(x,{}).get('name','')}"
         )
+        cluster_color_map = {
+            row['Label']: CLUSTER_META.get(row['Cluster'], {}).get('color', PALETTE['accent'])
+            for _, row in df_cnt.iterrows()
+        }
         fig_pie = px.pie(
             df_cnt, values='Count', names='Label',
-            hole=0.45, color_discrete_sequence=CHART_COLORS,
+            hole=0.45, color='Label', color_discrete_map=cluster_color_map,
         )
         fig_pie.update_traces(textfont_size=11, hovertemplate="<b>%{label}</b><br>%{value:,} transaksi (%{percent})<extra></extra>")
         st.plotly_chart(chart_layout(fig_pie, 350), use_container_width=True)
