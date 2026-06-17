@@ -649,7 +649,7 @@ with tab2:
         ci1, ci2 = st.columns(2)
 
         with ci1:
-            st.markdown('<div class="chart-title">🏆 Top 5 Items by Revenue</div>', unsafe_allow_html=True)
+            st.markdown('<div class="chart-title">Top 5 Items by Revenue</div>', unsafe_allow_html=True)
             if 'Item' in fdf.columns:
                 top5 = fdf.groupby('Item')['Total Spent'].sum().nlargest(5).reset_index()
                 fig_t5 = px.bar(
@@ -665,7 +665,7 @@ with tab2:
                 st.info("Kolom 'Item' tidak ditemukan.")
 
         with ci2:
-            st.markdown('<div class="chart-title">📦 Revenue by Category</div>', unsafe_allow_html=True)
+            st.markdown('<div class="chart-title">Revenue by Category</div>', unsafe_allow_html=True)
             df_cc = fdf.groupby('Category')['Total Spent'].sum().reset_index().sort_values('Total Spent', ascending=False)
             fig_cc = px.bar(
                 df_cc, x='Category', y='Total Spent',
