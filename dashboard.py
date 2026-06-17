@@ -10,14 +10,11 @@ def markdown_to_html(text):
     # newline -> <br>
     text = text.replace('\n', '<br>')
     return text
-# ==========================================
-# 🔑 PASTE API KEY GROQ KAMU DI SINI
-# ==========================================
+
+#api
 GROQ_API_KEY = st.secrets.get("GROQ_API_KEY", "")
 
-# ==========================================
-# DESIGN TOKENS — Dark Navy Intelligence Theme
-# ==========================================
+
 PALETTE = {
     "bg":        "#0D1117",
     "surface":   "#161B22",
@@ -40,9 +37,7 @@ st.set_page_config(
     initial_sidebar_state="collapsed",
 )
 
-# ==========================================
-# CUSTOM CSS
-# ==========================================
+#css
 st.markdown(f"""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
@@ -284,9 +279,7 @@ st.markdown(f"""
 """, unsafe_allow_html=True)
 
 
-# ==========================================
-# LOAD & PREPARE DATA
-# ==========================================
+#load data
 @st.cache_data
 def load_data():
     df = pd.read_csv("retail_sales_clustered.csv")
@@ -301,13 +294,11 @@ def load_data():
 try:
     df = load_data()
 except FileNotFoundError:
-    st.error("⚠️ File 'retail_sales_clustered.csv' tidak ditemukan!")
+    st.error("file tidak ditemukan!")
     st.stop()
 
 
-# ==========================================
-# PLOTLY CHART THEME
-# ==========================================
+#chart
 def chart_layout(fig, height=320):
     fig.update_layout(
         height=height,
@@ -333,9 +324,7 @@ def chart_layout(fig, height=320):
     return fig
 
 
-# ==========================================
-# GROQ AI
-# ==========================================
+#ai
 @st.cache_data(show_spinner=False)
 def generate_promo_with_api(cluster_name, profile_info, top_categories):
     if not GROQ_API_KEY or GROQ_API_KEY == "gsk_xxxxxx":
@@ -372,9 +361,7 @@ Jangan tulis intro, kesimpulan, atau poin tambahan. Langsung 3 poin saja.
         return f"❌ Gagal memanggil AI. Error: {str(e)}"
 
 
-# ==========================================
-# HEADER
-# ==========================================
+#atas
 st.markdown("""
 <div class="dash-header">
   <p class="dash-title">📊 Retail Intelligence Dashboard</p>
@@ -385,12 +372,10 @@ st.markdown("""
 tab1, tab2 = st.tabs(["📈  Executive Sales Overview", "🤖  AI Customer Segmentation & Promo"])
 
 
-# ============================================================
-# TAB 1 — EXECUTIVE SALES OVERVIEW
-# ============================================================
+#sales overview
 with tab1:
 
-    # ── FILTER BAR ──────────────────────────────────────────
+    # filter
     with st.container():
         st.markdown('<div class="filter-label">🔽 Filter Data</div>', unsafe_allow_html=True)
         fc1, fc2, fc3 = st.columns([2, 2, 3])
@@ -425,7 +410,7 @@ with tab1:
 
     st.markdown("---")
 
-    # ── KPI CARDS ───────────────────────────────────────────
+    #kpi
     kpi1, kpi2, kpi3, kpi4 = st.columns(4)
     total_rev   = dff['Total Spent'].sum()
     total_trx   = dff['Transaction ID'].nunique()
@@ -437,7 +422,6 @@ with tab1:
         <div class="kpi-card blue">
           <div class="kpi-label">Total Revenue</div>
           <div class="kpi-value">${total_rev:,.0f}</div>
-          <div class="kpi-sub">across all transactions</div>
         </div>""", unsafe_allow_html=True)
 
     with kpi2:
@@ -445,7 +429,6 @@ with tab1:
         <div class="kpi-card green">
           <div class="kpi-label">Transactions</div>
           <div class="kpi-value">{total_trx:,}</div>
-          <div class="kpi-sub">unique transaction IDs</div>
         </div>""", unsafe_allow_html=True)
 
     with kpi3:
@@ -453,7 +436,6 @@ with tab1:
         <div class="kpi-card red">
           <div class="kpi-label">Customers</div>
           <div class="kpi-value">{total_cust:,}</div>
-          <div class="kpi-sub">unique customer IDs</div>
         </div>""", unsafe_allow_html=True)
 
     with kpi4:
@@ -461,12 +443,11 @@ with tab1:
         <div class="kpi-card purple">
           <div class="kpi-label">Avg Order Value</div>
           <div class="kpi-value">${avg_order:,.2f}</div>
-          <div class="kpi-sub">per transaction</div>
         </div>""", unsafe_allow_html=True)
 
     st.markdown("<br>", unsafe_allow_html=True)
 
-    # ── ROW 1: Monthly Trend + Category Revenue ──────────────
+    #chart 1 (monthly sales)
     r1c1, r1c2 = st.columns(2)
 
     with r1c1:
@@ -487,6 +468,7 @@ with tab1:
         st.plotly_chart(chart_layout(fig_trend, 300), use_container_width=True)
 
     with r1c2:
+        #chart 2 (revenue by product)
         st.markdown('<div class="chart-title">Revenue by Product Category</div>', unsafe_allow_html=True)
         df_cat = dff.groupby('Category')['Total Spent'].sum().reset_index().sort_values('Total Spent')
         fig_cat = px.bar(
@@ -501,7 +483,7 @@ with tab1:
         fig_cat.update_xaxes(tickprefix="$", tickformat=",.0f")
         st.plotly_chart(chart_layout(fig_cat, 300), use_container_width=True)
 
-    # ── ROW 2: Discount Impact + Location/Payment Split ───────
+    #chart 3 (Discount impact)
     st.markdown("---")
     r2c1, r2c2 = st.columns([3, 2])
 
@@ -530,6 +512,7 @@ with tab1:
         st.plotly_chart(chart_layout(fig_disc, 310), use_container_width=True)
 
     with r2c2:
+        #chart 4 (Revenue)
         st.markdown('<div class="chart-title">🗂 Revenue Split</div>', unsafe_allow_html=True)
 
         tab_loc, tab_pay = st.tabs(["By Location", "By Payment"])
@@ -552,9 +535,7 @@ with tab1:
             st.plotly_chart(chart_layout(fig_pay, 260), use_container_width=True)
 
 
-# ============================================================
-# TAB 2 — AI CUSTOMER SEGMENTATION & PROMO
-# ============================================================
+#ai recomendation
 with tab2:
 
     CLUSTER_META = {
@@ -586,7 +567,7 @@ with tab2:
     </div>
     """, unsafe_allow_html=True)
 
-    # ── RFM Summary Table (all clusters) ─────────────────────
+    # Recency, Frequency, Monetary
     st.markdown('<div class="chart-title">Recency, Frequency, Monetary Summary per Cluster</div>', unsafe_allow_html=True)
 
     if 'Cluster' in df.columns:
@@ -626,11 +607,11 @@ with tab2:
         </table>
         """, unsafe_allow_html=True)
     else:
-        st.info("Kolom 'Cluster' tidak ditemukan di dataset.")
+        st.info("salah dataset")
 
     st.markdown("---")
 
-    # ── Cluster selector ─────────────────────────────────────
+    # Cluster selector
     sel_cluster = st.selectbox(
         "Pilih Cluster untuk Analisis Detail",
         options=["Tampilkan Semua", "Cluster 0", "Cluster 1", "Cluster 2"],
@@ -656,7 +637,7 @@ with tab2:
         fdf = df[df['Cluster'] == cluster_num] if 'Cluster' in df.columns else df
         meta = CLUSTER_META[cluster_num]
 
-        # Profile header
+        # Profile rfm
         st.markdown(f"""
         <div style="background:{meta['color']}11;border:1px solid {meta['color']}44;border-radius:10px;padding:1rem 1.2rem;margin:0.8rem 0 1.2rem">
           <div style="font-size:1rem;font-weight:700;color:{meta['color']};margin-bottom:0.3rem">{meta['emoji']} {meta['name']}</div>
@@ -664,7 +645,7 @@ with tab2:
         </div>
         """, unsafe_allow_html=True)
 
-        # Charts: Top 5 Items + Category breakdown
+        # Charts 5 (Top 5 items by revenue)
         ci1, ci2 = st.columns(2)
 
         with ci1:
@@ -697,7 +678,7 @@ with tab2:
             fig_cc.update_traces(hovertemplate="<b>%{x}</b><br>$%{y:,.0f}<extra></extra>")
             st.plotly_chart(chart_layout(fig_cc, 270), use_container_width=True)
 
-        # AI Promo
+        # AI Promo recom
         st.markdown("---")
         top_cats = fdf['Category'].value_counts().head(2).index.tolist()
         top_cats_str = ", ".join(top_cats)
