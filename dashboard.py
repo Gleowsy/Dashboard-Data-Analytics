@@ -513,7 +513,7 @@ with tab1:
 
     with r2c2:
         #chart 4 (Revenue)
-        st.markdown('<div class="chart-title">🗂 Revenue Split</div>', unsafe_allow_html=True)
+        st.markdown('<div class="chart-title">Revenue Split</div>', unsafe_allow_html=True)
 
         tab_loc, tab_pay = st.tabs(["By Location", "By Payment"])
         with tab_loc:
